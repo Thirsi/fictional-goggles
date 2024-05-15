@@ -1,0 +1,50 @@
+[gd_scene load_steps=10 format=3 uid="uid://cyam1s8y06r33"]
+
+[ext_resource type="Texture2D" uid="uid://ccm7ru8qjof5x" path="res://assets/grid.png" id="1_ex4ct"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_ogbcs"]
+[ext_resource type="PackedScene" uid="uid://blqtjpr2e5k0o" path="res://scenes/xr_origin.tscn" id="2_4h3gn"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_brju1"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_5lc78"]
+sky_material = SubResource("ProceduralSkyMaterial_brju1")
+
+[sub_resource type="Environment" id="Environment_1h1fb"]
+background_mode = 1
+sky = SubResource("Sky_5lc78")
+tonemap_mode = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2mfjq"]
+size = Vector3(5, 0.1, 5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pq35t"]
+albedo_texture = ExtResource("1_ex4ct")
+uv1_scale = Vector3(2.605, 1, 2.605)
+uv1_triplanar = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_sv2qu"]
+lightmap_size_hint = Vector2i(504, 257)
+material = SubResource("StandardMaterial3D_pq35t")
+size = Vector3(50, 0.1, 50)
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_ogbcs")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1h1fb")
+
+[node name="XR_Origin" parent="." instance=ExtResource("2_4h3gn")]
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_2mfjq")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/CollisionShape3D"]
+mesh = SubResource("BoxMesh_sv2qu")
